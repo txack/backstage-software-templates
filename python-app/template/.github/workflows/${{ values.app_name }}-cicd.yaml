@@ -80,6 +80,37 @@ jobs:
           sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
           rm argocd-linux-amd64
 
+      - name: Connect repo to ArgoCD
+        shell: bash
+        run: |
+          repo="https://github.com/master-txack/${{ values.app_name }}.git"
+          argocd login argocd-server.argocd \
+            --insecure \
+            --grpc-web \
+            --username admin \
+            --password ${{ '${{ secrets.ARGOCD_PASSWORD }}' }}
+          argocd repo list | grep -q $repo || argocd repo add $repo
+
+      - name: Ensure ArgoCD app
+        shell: bash
+        run: |
+          repo="https://github.com/master-txack/${{ values.app_name }}.git"
+          argocd login argocd-server.argocd \
+            --insecure \
+            --grpc-web \
+            --username admin \
+            --password ${{ '${{ secrets.ARGOCD_PASSWORD }}' }}
+          argocd app get ${{ values.app_name }} || argocd app create ${{ values.app_name }} \
+            --repo $repo \
+            --revision main \
+            --path charts/${{ values.app_name }} \
+            --dest-namespace ${{ values.app_env }} \
+            --dest-server https://kubernetes.default.svc \
+            --values values-${{ values.app_env }}.yaml \
+            --sync-policy automated \
+            --sync-option CreateNamespace=true
+
+
       - name: ArgoCD app Sync
         shell: bash
         run: |
@@ -89,3 +120,4 @@ jobs:
             --username admin \
             --password ${{ '${{ secrets.ARGOCD_PASSWORD }}' }}
           argocd app sync ${{ values.app_name }}
+          argocd app wait ${{ values.app_name }} --health --timeout 180
