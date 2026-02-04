@@ -1,16 +1,13 @@
-# Notice the v1beta3 version
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
-# some metadata about the template itself
 metadata:
-  name: python-app
-  title: Python Flask Template
-  description: Provision a Python Flask application with TechDocs integration
+  name: python-template
+  title: Python flask template
+  description: Provisions a minimalistic flask application
 spec:
   owner: development
   type: service
 
-  # these are the steps which are rendered in the frontend with the form input
   parameters:
     - title: Fill in some steps
       required:
@@ -22,27 +19,13 @@ spec:
           type: string
           description: Provide a component (microservice) name
           pattern: '^([a-zA-Z][a-zA-Z0-9]*)(-[a-zA-Z0-9]+)*$'
-      environment:
-          title: Deployment Environment
+        environment:
+          title: Environment
           type: string
-          description: Select the deployment environment
-          enum:
-            - dev
-            - prod
+          description: The environment where this component will be deployed
+          ui:autofocus: true
+          ui:enumNames': ['dev', 'prod']
 
-    - title: Choose a location
-      required:
-        - repoUrl
-      properties:
-        repoUrl:
-          title: Repository Location
-          type: string
-          ui:field: RepoUrlPicker
-          ui:options:
-            allowedHosts:
-              - github.com
-
-  # here's the steps that are executed in series in the scaffolder backend
   steps:
     - id: fetch-base
       name: Fetch Base
