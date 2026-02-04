@@ -23,7 +23,9 @@ spec:
           title: Environment
           type: string
           description: The environment where this component will be deployed
-          enum:
+          ui:autofocus: true
+          ui:enumNames': ['dev', 'prod']
+          enum: 
             - dev
             - prod
 
