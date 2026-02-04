@@ -1,0 +1,12 @@
+site_name: '${{ values.app_name }}'
+site_description: 'Main documentation for ${{ values.app_name }} features and framework APIs'
+repo_url: https://github.com/txack/${{ values.app_name }}
+edit_uri: edit/master/docs
+
+plugins:
+  - techdocs-core
+
+# For sidebar navigation on https://backstage.io/, see `microsite/sidebars.js`
+nav:
+  - Overview:
+      - Getting Started: 'docs/index.md'
