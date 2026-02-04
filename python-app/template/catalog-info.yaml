@@ -4,7 +4,7 @@ metadata:
   name: ${{ values.app_name }}
   description: Displays time
   annotations:
-    github.com/project-slug: txack/${{ values.app_name }}
+    github.com/project-slug: master-txack/${{ values.app_name }}
     backstage.io/techdocs-ref: dir:.
 spec:
   type: service
